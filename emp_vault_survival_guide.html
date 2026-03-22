@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMP Vault Survival Guide</title>
+  <style>
+    :root{
+      --bg:#060912;
+      --bg2:#0b1224;
+      --panel:rgba(13,18,35,.82);
+      --panel2:rgba(17,27,51,.9);
+      --line:rgba(120,170,255,.16);
+      --cyan:#8ef1ff;
+      --blue:#78aaff;
+      --violet:#ad88ff;
+      --pink:#ff77d1;
+      --green:#8dffc7;
+      --warn:#ffd86f;
+      --danger:#ff8796;
+      --text:#edf5ff;
+      --muted:#9cb0d0;
+      --shadow:0 24px 80px rgba(0,0,0,.38);
+      --radius:24px;
+      --radius2:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:
+      radial-gradient(circle at 15% 10%, rgba(120,170,255,.12), transparent 25%),
+      radial-gradient(circle at 85% 12%, rgba(255,119,209,.08), transparent 22%),
+      radial-gradient(circle at 50% 100%, rgba(141,255,199,.06), transparent 25%),
+      linear-gradient(180deg,#03050a 0%,#07101f 45%,#060a11 100%);
+      color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    body::before{
+      content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:40px 40px;
+      mask-image:linear-gradient(to bottom, rgba(255,255,255,.7), rgba(255,255,255,.15));
+    }
+    .wrap{width:min(1320px, calc(100% - 28px)); margin:0 auto; padding:22px 0 72px; position:relative}
+    .topbar, .panel{border:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)); box-shadow:var(--shadow); backdrop-filter:blur(14px)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;border-radius:20px;padding:16px 18px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.15);background:
+      conic-gradient(from 210deg, rgba(120,170,255,.28), rgba(173,136,255,.5), rgba(255,119,209,.25), rgba(120,170,255,.28))}
+    .logo span{font-weight:800;letter-spacing:.18em}
+    .brand h1{margin:0;font-size:clamp(1.05rem, 1vw + .8rem, 1.6rem);letter-spacing:.11em;text-transform:uppercase}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:.9rem;letter-spacing:.09em;text-transform:uppercase}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .chip{padding:10px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:#dbe9ff}
+
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:18px}
+    .panel{border-radius:var(--radius);overflow:hidden}
+    .heroMain{padding:28px}
+    .eyebrow{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:999px;background:rgba(142,241,255,.06);border:1px solid rgba(142,241,255,.18);color:var(--cyan);text-transform:uppercase;letter-spacing:.16em;font-size:.82rem}
+    .eyebrow::before{content:"";width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#c8fbff 0%, #5ce7ff 48%, transparent 70%);box-shadow:0 0 16px rgba(92,231,255,.6)}
+    h2.big{font-size:clamp(2.2rem,4.6vw,4.7rem);line-height:.93;letter-spacing:-.05em;max-width:11ch;margin:18px 0 14px}
+    .grad{background:linear-gradient(90deg,#fff 0%,#b6efff 28%,#a8baff 58%,#f0bcff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lede{font-size:1.03rem;line-height:1.74;color:#cbdbf5;max-width:60ch}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .stat{padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .stat .k{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+    .stat strong{font-size:1.08rem}
+
+    .heroArt{padding:20px;display:grid;grid-template-rows:auto 1fr auto;gap:14px}
+    .pills{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:var(--muted);text-transform:uppercase;font-size:.76rem;letter-spacing:.13em}
+    .artBox{min-height:420px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:
+      radial-gradient(circle at 50% 24%, rgba(142,241,255,.1), transparent 22%),
+      linear-gradient(180deg, rgba(6,12,24,.98), rgba(8,12,20,.98));
+      overflow:hidden;position:relative}
+    .artBox svg{width:100%;height:100%;display:block}
+    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .metric{padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .metric .k{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.13em;font-size:.72rem;margin-bottom:5px}
+    .metric .v{font-size:1.06rem;font-weight:800}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+    .section{padding:22px}
+    .section h3{margin:0 0 12px;font-size:1.32rem;letter-spacing:-.02em}
+    .section p{margin:0;color:#c6d6f0;line-height:1.68}
+    .specs{display:grid;gap:12px;margin-top:18px}
+    .spec{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:14px;border-radius:15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+    .spec .left{color:var(--cyan);font-size:.74rem;text-transform:uppercase;letter-spacing:.15em;font-weight:700}
+    .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .card{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.016))}
+    .bad{color:var(--danger)} .warn{color:var(--warn)} .ok{color:var(--green)}
+    .card h4{margin:0 0 8px}
+    .card p{margin:0;font-size:.94rem;line-height:1.58}
+
+    .wide{margin-bottom:18px}
+    .blue{padding:0}
+    .blueHead{padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+    .sub{color:var(--muted);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+    .canvas{padding:22px;background:
+      radial-gradient(circle at 10% 0%, rgba(142,241,255,.06), transparent 26%),
+      linear-gradient(180deg, rgba(6,10,19,.96), rgba(8,10,16,.98))}
+    .canvas svg{width:100%;height:auto;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02)}
+
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+    .step{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(142,241,255,.08);border:1px solid rgba(142,241,255,.16);color:var(--cyan);font-weight:800;margin-bottom:12px}
+    .step h4{margin:0 0 8px}
+    .step p{margin:0;color:#c5d5ef;line-height:1.58;font-size:.94rem}
+
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .figure{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .figure svg{width:100%;height:auto;display:block;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg, #091224, #09111b)}
+    .caption{margin-top:10px;color:#c9d9f2;line-height:1.58;font-size:.93rem}
+    .caption strong{display:block;color:#fff;margin-bottom:4px}
+
+    .footerGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .code{padding:16px;border-radius:16px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;white-space:pre-wrap;line-height:1.72;color:#ddedff;font-size:.93rem}
+    .legend{display:grid;gap:10px}
+    .row{display:flex;justify-content:space-between;gap:14px;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .row span:first-child{color:var(--muted);text-transform:uppercase;letter-spacing:.13em;font-size:.74rem}
+    .note{margin-top:18px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,216,111,.22);background:rgba(255,216,111,.06);color:#fff1c2;line-height:1.62}
+
+    @media (max-width:1100px){
+      .hero,.grid2,.footerGrid{grid-template-columns:1fr}
+      .steps{grid-template-columns:repeat(2,1fr)}
+      .cards3,.gallery{grid-template-columns:1fr}
+    }
+    @media (max-width:760px){
+      .wrap{width:min(100% - 16px, 1320px)}
+      .topbar,.heroMain,.heroArt,.section{padding:16px}
+      .stats,.metrics,.steps{grid-template-columns:1fr}
+      .spec{grid-template-columns:1fr}
+      .artBox{min-height:320px}
+      .chips{justify-content:flex-start}
+    }
+    @media print{
+      body::before{display:none}
+      .wrap{width:100%;padding:0}
+      .topbar,.panel{box-shadow:none;backdrop-filter:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"><span>EMP</span></div>
+        <div>
+          <h1>EMP Vault Survival Guide</h1>
+          <p>DIY Faraday capsule for SD cards and critical archives</p>
+        </div>
+      </div>
+      <div class="chips">
+        <div class="chip">Standalone HTML</div>
+        <div class="chip">Printable</div>
+        <div class="chip">Illustrated</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="panel heroMain">
+        <div class="eyebrow">Reality-based hardening guide</div>
+        <h2 class="big"><span class="grad">Build the casing, not the myth.</span></h2>
+        <p class="lede">
+          There are no truly EMP-proof SD cards or USB sticks. The protection comes from a properly built
+          conductive enclosure with clean seam contact, internal insulation, and layered redundancy. This guide
+          shows the exact concept, what parts matter, what mistakes ruin the build, and how to assemble a compact
+          vault-grade storage capsule.
+        </p>
+        <div class="stats">
+          <div class="stat"><span class="k">Core truth</span><strong>Media is fragile. Enclosure is the shield.</strong></div>
+          <div class="stat"><span class="k">Best storage format</span><strong>Multiple SD cards with duplicates</strong></div>
+          <div class="stat"><span class="k">Best DIY shell</span><strong>Threaded steel pipe capsule</strong></div>
+        </div>
+      </div>
+
+      <div class="panel heroArt">
+        <div class="pills">
+          <div class="pill">Conductive continuity</div>
+          <div class="pill">Internal isolation</div>
+          <div class="pill">Layered shielding</div>
+        </div>
+        <div class="artBox">
+          <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of an EMP shielding capsule">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#182d55"/>
+                <stop offset="48%" stop-color="#101c35"/>
+                <stop offset="100%" stop-color="#2a4375"/>
+              </linearGradient>
+              <linearGradient id="metal" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,.45)"/>
+                <stop offset="18%" stop-color="rgba(255,255,255,.16)"/>
+                <stop offset="55%" stop-color="rgba(255,255,255,.03)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,.2)"/>
+              </linearGradient>
+              <radialGradient id="core" cx="40%" cy="40%" r="70%">
+                <stop offset="0%" stop-color="rgba(141,255,199,.34)"/>
+                <stop offset="32%" stop-color="rgba(120,170,255,.16)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+              </radialGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+
+            <g opacity=".28">
+              <path d="M0 80H900M0 160H900M0 240H900M0 320H900M0 400H900" stroke="rgba(142,241,255,.16)"/>
+              <path d="M120 0V520M240 0V520M360 0V520M480 0V520M600 0V520M720 0V520M840 0V520" stroke="rgba(142,241,255,.12)"/>
+            </g>
+
+            <g transform="translate(110 122)">
+              <g transform="skewX(-10)">
+                <rect x="20" y="70" width="620" height="150" rx="76" fill="url(#g1)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+                <rect x="20" y="70" width="620" height="150" rx="76" fill="url(#metal)"/>
+                <rect x="110" y="94" width="430" height="102" rx="50" fill="url(#core)" stroke="rgba(141,255,199,.28)" stroke-width="2"/>
+                <rect x="48" y="88" width="84" height="114" rx="46" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" />
+                <rect x="558" y="88" width="54" height="114" rx="26" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" />
+                <circle cx="228" cy="146" r="8" fill="#8ef1ff" filter="url(#glow)"/>
+                <circle cx="465" cy="146" r="8" fill="#8effc7" filter="url(#glow)"/>
+                <text x="324" y="152" text-anchor="middle" fill="#d6fff0" font-size="26" font-family="Inter, sans-serif" letter-spacing="8">VAULT CORE</text>
+              </g>
+            </g>
+
+            <g font-family="Inter, sans-serif" font-size="18" fill="#e9f6ff">
+              <rect x="58" y="70" width="190" height="48" rx="12" fill="rgba(6,12,24,.88)" stroke="rgba(255,255,255,.1)"/>
+              <text x="78" y="100">Threaded steel end cap</text>
+              <line x1="248" y1="94" x2="304" y2="156" stroke="rgba(142,241,255,.6)" stroke-width="2"/>
+              <circle cx="304" cy="156" r="6" fill="#8ef1ff"/>
+
+              <rect x="618" y="44" width="220" height="48" rx="12" fill="rgba(6,12,24,.88)" stroke="rgba(255,255,255,.1)"/>
+              <text x="638" y="74">Conductive outer shell</text>
+              <line x1="618" y1="92" x2="572" y2="176" stroke="rgba(142,241,255,.6)" stroke-width="2"/>
+              <circle cx="572" cy="176" r="6" fill="#8ef1ff"/>
+
+              <rect x="610" y="368" width="228" height="52" rx="12" fill="rgba(6,12,24,.88)" stroke="rgba(255,255,255,.1)"/>
+              <text x="630" y="398">Insulated media pack inside</text>
+              <line x1="630" y1="368" x2="520" y2="280" stroke="rgba(141,255,199,.6)" stroke-width="2"/>
+              <circle cx="520" cy="280" r="6" fill="#8effc7"/>
+
+              <rect x="42" y="394" width="270" height="52" rx="12" fill="rgba(6,12,24,.88)" stroke="rgba(255,255,255,.1)"/>
+              <text x="62" y="424">Energy routes around cage, not through card</text>
+            </g>
+          </svg>
+        </div>
+        <div class="metrics">
+          <div class="metric"><span class="k">Main failure point</span><span class="v">Bad seam conductivity</span></div>
+          <div class="metric"><span class="k">Main rule</span><span class="v">Card never touches metal</span></div>
+          <div class="metric"><span class="k">Good upgrade</span><span class="v">Faraday bag inside capsule</span></div>
+          <div class="metric"><span class="k">Best strategy</span><span class="v">Duplicate archives off-site</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="panel section">
+        <h3>What you are really building</h3>
+        <p>
+          You are building a small Faraday system around delicate digital media. The outer metal body must behave as one continuous conductive shell.
+          The seam cannot be broken by paint, rubber, or coatings. The media must be suspended inside with non-conductive support so any pulse energy
+          travels around the container rather than coupling into the storage.
+        </p>
+        <div class="specs">
+          <div class="spec"><div class="left">Outer shell</div><div>Threaded steel pipe body and metal end caps are ideal for a compact DIY capsule.</div></div>
+          <div class="spec"><div class="left">Contact path</div><div>Sand threads and contact faces to expose bare metal so the shell closes with real continuity.</div></div>
+          <div class="spec"><div class="left">Internal buffer</div><div>Use foam, rubber, plastic sleeves, or card stock to prevent direct contact between media and shell.</div></div>
+          <div class="spec"><div class="left">Redundancy</div><div>Use multiple SD cards with the same archive instead of trusting a single device.</div></div>
+        </div>
+      </div>
+
+      <div class="panel section">
+        <h3>Threat and failure reality</h3>
+        <p>
+          Rugged, waterproof, shockproof, or industrial labels do not mean EMP-proof. Consumer storage still uses sensitive semiconductor controllers and memory.
+          A small, cleanly built shield system is far more realistic than hunting for mythical EMP-proof media.
+        </p>
+        <div class="cards3">
+          <div class="card">
+            <h4 class="bad">Bad</h4>
+            <p>Bare SD cards, bare USB sticks, decorative metal shells, loose lids, rubber-isolated seams, and storage touching the metal wall.</p>
+          </div>
+          <div class="card">
+            <h4 class="warn">Better</h4>
+            <p>Media in a plastic case inside a Faraday bag, but with no second enclosure or weak seam quality.</p>
+          </div>
+          <div class="card">
+            <h4 class="ok">Best realistic DIY</h4>
+            <p>Duplicated SD archives, insulated, inside a Faraday pouch, inside a sanded threaded steel capsule, optionally inside a second steel box.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel wide blue">
+      <div class="blueHead">
+        <div>
+          <h3 style="margin:0 0 6px">Exploded blueprint</h3>
+          <div class="sub">The exact layer order for a compact survival build</div>
+        </div>
+        <div class="chip">SD card → sleeve → Faraday pouch → steel capsule</div>
+      </div>
+      <div class="canvas">
+        <svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Exploded blueprint of the storage stack">
+          <defs>
+            <linearGradient id="bgx" x1="0" x2="1">
+              <stop offset="0%" stop-color="rgba(120,170,255,.08)"/>
+              <stop offset="100%" stop-color="rgba(173,136,255,.02)"/>
+            </linearGradient>
+            <linearGradient id="shell2" x1="0" x2="1">
+              <stop offset="0%" stop-color="#1a315d"/>
+              <stop offset="55%" stop-color="#0f1a33"/>
+              <stop offset="100%" stop-color="#2c467d"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="1200" height="440" fill="url(#bgx)"/>
+          <g opacity=".22">
+            <path d="M0 40H1200M0 80H1200M0 120H1200M0 160H1200M0 200H1200M0 240H1200M0 280H1200M0 320H1200M0 360H1200M0 400H1200" stroke="#8ef1ff"/>
+            <path d="M40 0V440M120 0V440M200 0V440M280 0V440M360 0V440M440 0V440M520 0V440M600 0V440M680 0V440M760 0V440M840 0V440M920 0V440M1000 0V440M1080 0V440M1160 0V440" stroke="#8ef1ff"/>
+          </g>
+
+          <g font-family="Inter, sans-serif" fill="#eef6ff">
+            <g transform="translate(60 165)">
+              <rect x="0" y="0" width="98" height="70" rx="10" fill="#d8dbe5" stroke="rgba(255,255,255,.34)"/>
+              <rect x="0" y="0" width="98" height="18" rx="10" fill="#d5525e"/>
+              <rect x="10" y="22" width="38" height="10" rx="4" fill="#a2b3cf"/>
+              <text x="12" y="55" fill="#0c1628" font-size="16" font-weight="700">SD</text>
+              <text x="0" y="-26" fill="#dff7ff" font-size="18">1. Archive card set</text>
+            </g>
+
+            <g transform="translate(255 150)">
+              <rect x="0" y="0" width="128" height="102" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-dasharray="8 6"/>
+              <rect x="18" y="16" width="92" height="70" rx="12" fill="rgba(173,136,255,.14)" stroke="rgba(173,136,255,.4)"/>
+              <text x="0" y="-26" fill="#dff7ff" font-size="18">2. Plastic sleeve / insert</text>
+            </g>
+
+            <g transform="translate(470 138)">
+              <rect x="0" y="0" width="186" height="126" rx="18" fill="rgba(120,170,255,.06)" stroke="rgba(142,241,255,.34)"/>
+              <rect x="16" y="14" width="154" height="98" rx="14" fill="rgba(142,241,255,.1)" stroke="rgba(142,241,255,.26)"/>
+              <text x="0" y="-26" fill="#dff7ff" font-size="18">3. Faraday pouch</text>
+            </g>
+
+            <g transform="translate(745 118)">
+              <rect x="18" y="32" width="328" height="140" rx="70" fill="url(#shell2)" stroke="rgba(255,255,255,.22)"/>
+              <rect x="18" y="32" width="328" height="140" rx="70" fill="rgba(255,255,255,.12)"/>
+              <rect x="0" y="48" width="64" height="108" rx="38" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+              <rect x="300" y="48" width="64" height="108" rx="38" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+              <text x="0" y="-26" fill="#dff7ff" font-size="18">4. Sanded threaded steel capsule</text>
+            </g>
+
+            <path d="M175 200H233M396 200H448M665 200H725" stroke="rgba(142,241,255,.7)" stroke-width="3" stroke-dasharray="8 8"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="panel section wide">
+      <h3>Visual assembly sequence</h3>
+      <p>These diagrams show the practical logic from raw parts to finished enclosure.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">01</div>
+          <h4>Prep the shell</h4>
+          <p>Take a threaded steel pipe body and two metal caps. Sand the threads and mating surfaces until the contact areas are bright, bare, and continuous.</p>
+        </div>
+        <div class="step">
+          <div class="num">02</div>
+          <h4>Isolate the media</h4>
+          <p>Put one or more SD cards in sleeves or a small insert. Add foam around them so nothing touches the shell or shifts during impact.</p>
+        </div>
+        <div class="step">
+          <div class="num">03</div>
+          <h4>Add inner shielding</h4>
+          <p>Place the media pack into a Faraday pouch, then insert the pouch into the shell body for a second conductive barrier.</p>
+        </div>
+        <div class="step">
+          <div class="num">04</div>
+          <h4>Seal and duplicate</h4>
+          <p>Tighten the caps fully. Create at least one second identical capsule in a different location for true archive survival.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section wide">
+      <h3>Picture explanations</h3>
+      <p>These simple visuals explain the biggest mistakes and the correct concept without needing outside images.</p>
+      <div class="gallery">
+        <div class="figure">
+          <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bad build example">
+            <rect width="340" height="220" rx="18" fill="#09101e"/>
+            <rect x="44" y="62" width="252" height="96" rx="16" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.18)" stroke-dasharray="12 8"/>
+            <rect x="120" y="84" width="100" height="52" rx="10" fill="#d8dbe5"/>
+            <text x="136" y="115" fill="#0b1020" font-size="20" font-weight="700">SD</text>
+            <line x1="34" y1="30" x2="306" y2="190" stroke="#ff8796" stroke-width="8"/>
+            <line x1="306" y1="30" x2="34" y2="190" stroke="#ff8796" stroke-width="8"/>
+            <text x="20" y="30" fill="#ffd5dc" font-size="18">Loose seam / exposed storage</text>
+          </svg>
+          <div class="caption"><strong>Bad example</strong> A decorative or leaky metal box with bad seams is not a real shielding system. Storage directly inside without insulation is also wrong.</div>
+        </div>
+
+        <div class="figure">
+          <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Good layered example">
+            <rect width="340" height="220" rx="18" fill="#09101e"/>
+            <rect x="40" y="58" width="260" height="104" rx="52" fill="#193058" stroke="rgba(255,255,255,.24)"/>
+            <rect x="72" y="82" width="196" height="56" rx="28" fill="rgba(142,241,255,.1)" stroke="rgba(142,241,255,.34)"/>
+            <rect x="124" y="94" width="92" height="32" rx="8" fill="#d8dbe5"/>
+            <text x="142" y="116" fill="#0b1020" font-size="18" font-weight="700">SD</text>
+            <path d="M26 110 C70 56, 270 52, 316 110" fill="none" stroke="#8effc7" stroke-width="5" stroke-dasharray="10 7"/>
+            <path d="M26 110 C70 164, 270 168, 316 110" fill="none" stroke="#8effc7" stroke-width="5" stroke-dasharray="10 7"/>
+            <text x="74" y="30" fill="#d7ffea" font-size="18">Pulse routes around the shell</text>
+          </svg>
+          <div class="caption"><strong>Good concept</strong> The shell forms the conductive body, the pouch adds another barrier, and the storage sits isolated inside the protected volume.</div>
+        </div>
+
+        <div class="figure">
+          <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redundancy example">
+            <rect width="340" height="220" rx="18" fill="#09101e"/>
+            <rect x="42" y="72" width="80" height="48" rx="10" fill="#d8dbe5"/>
+            <rect x="130" y="72" width="80" height="48" rx="10" fill="#d8dbe5"/>
+            <rect x="218" y="72" width="80" height="48" rx="10" fill="#d8dbe5"/>
+            <text x="62" y="102" fill="#09101e" font-size="18" font-weight="700">SD</text>
+            <text x="150" y="102" fill="#09101e" font-size="18" font-weight="700">SD</text>
+            <text x="238" y="102" fill="#09101e" font-size="18" font-weight="700">SD</text>
+            <path d="M82 142V188M170 142V188M258 142V188" stroke="#8ef1ff" stroke-width="4"/>
+            <circle cx="82" cy="194" r="10" fill="#8ef1ff"/>
+            <circle cx="170" cy="194" r="10" fill="#8effc7"/>
+            <circle cx="258" cy="194" r="10" fill="#ad88ff"/>
+            <text x="32" y="32" fill="#edf5ff" font-size="18">Best practice: duplicate archives</text>
+          </svg>
+          <div class="caption"><strong>Redundancy wins</strong> One perfect capsule is still one point of failure. Multiple cards in multiple containers and locations is the real survival architecture.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footerGrid">
+      <div class="panel section">
+        <h3>Recommended build stack</h3>
+        <div class="code">Minimal practical stack
+SD card
+→ plastic sleeve
+→ foam wrap
+→ Faraday pouch
+→ threaded steel capsule
+
+Overkill stack
+Primary SD set
+→ plastic sleeves
+→ Faraday pouch
+→ sanded threaded steel capsule
+→ larger conductive outer box
+→ second duplicate capsule off-site
+
+Archive discipline
+→ checksum manifest
+→ printed recovery sheet
+→ duplicate copies
+→ update after major revisions</div>
+        <div class="note">
+          Important: this is not a guarantee against every imaginable pulse scenario. It is the correct DIY direction for making storage far more resilient than a bare card or a gimmick “EMP” product.
+        </div>
+      </div>
+
+      <div class="panel section">
+        <h3>Quick truth table</h3>
+        <div class="legend">
+          <div class="row"><span>Myth</span><strong>EMP-proof SD card</strong></div>
+          <div class="row"><span>Reality</span><strong>EMP-protected enclosure system</strong></div>
+          <div class="row"><span>Best medium</span><strong>Small duplicated SD archives</strong></div>
+          <div class="row"><span>Main weak point</span><strong>Bad seam conductivity</strong></div>
+          <div class="row"><span>Key rule</span><strong>Storage never touches metal</strong></div>
+          <div class="row"><span>Best upgrade</span><strong>Nested shielding + off-site copy</strong></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<section class="panel section wide">
+  <h3>Perfect Build (Near-Theoretical Maximum)</h3>
+  <p>
+    To push this into “near perfect” territory (as far as real-world physics allows), you need to eliminate every weak point:
+  </p>
+  <div class="specs">
+    <div class="spec"><div class="left">Seam perfection</div><div>Machine-threaded steel or copper with full metal-to-metal compression. No rubber, no paint, no gaps.</div></div>
+    <div class="spec"><div class="left">Multi-layer cage</div><div>Faraday pouch → steel capsule → second outer metal box. Each layer attenuates more energy.</div></div>
+    <div class="spec"><div class="left">Ground isolation</div><div>Do NOT ground the container. A floating Faraday cage is more effective for EMP pulses.</div></div>
+    <div class="spec"><div class="left">Internal spacing</div><div>Keep storage centered with padding so it is not near any wall (reduces coupling).</div></div>
+    <div class="spec"><div class="left">Desiccant</div><div>Add silica gel to prevent moisture damage over long-term storage.</div></div>
+    <div class="spec"><div class="left">Data redundancy</div><div>3–5 identical SD cards stored in separate capsules and locations.</div></div>
+  </div>
+</section>
+
+<section class="panel section wide">
+  <h3>USB Adapter Integration (IMPORTANT)</h3>
+  <p>
+    If you want to access your SD cards easily on any system, you should include a USB adapter — but it MUST follow the same rules.
+  </p>
+
+  <div class="gallery">
+    <div class="figure">
+      <svg viewBox="0 0 340 220">
+        <rect width="340" height="220" rx="18" fill="#09101e"/>
+        <rect x="70" y="80" width="200" height="60" rx="10" fill="#cfd6e6"/>
+        <rect x="80" y="90" width="80" height="40" rx="6" fill="#0b1020"/>
+        <text x="90" y="115" fill="#fff" font-size="16">SD</text>
+        <rect x="180" y="90" width="70" height="40" rx="6" fill="#4a6cff"/>
+        <text x="185" y="115" fill="#fff" font-size="14">USB</text>
+      </svg>
+      <div class="caption">
+        <strong>SD → USB Adapter</strong>
+        Converts SD card to standard USB interface for universal access.
+      </div>
+    </div>
+
+    <div class="figure">
+      <svg viewBox="0 0 340 220">
+        <rect width="340" height="220" rx="18" fill="#09101e"/>
+        <rect x="40" y="70" width="260" height="80" rx="14" fill="#1b2f55"/>
+        <rect x="90" y="90" width="160" height="40" rx="10" fill="#cfd6e6"/>
+        <line x1="20" y1="20" x2="320" y2="200" stroke="#ff8796" stroke-width="6"/>
+      </svg>
+      <div class="caption">
+        <strong>Wrong Way</strong>
+        Leaving adapter plugged in or attached creates an antenna path = failure risk.
+      </div>
+    </div>
+
+    <div class="figure">
+      <svg viewBox="0 0 340 220">
+        <rect width="340" height="220" rx="18" fill="#09101e"/>
+        <rect x="60" y="70" width="220" height="80" rx="14" fill="#1b2f55"/>
+        <rect x="100" y="90" width="140" height="40" rx="10" fill="#cfd6e6"/>
+        <path d="M20 110 C80 60, 260 60, 320 110" stroke="#8effc7" stroke-width="5" fill="none"/>
+      </svg>
+      <div class="caption">
+        <strong>Correct Way</strong>
+        Store adapter separately INSIDE the same Faraday system, not connected.
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    Rule: The USB adapter is ONLY for access AFTER removal from the cage. Never store it connected to the SD card inside the capsule.
+  </div>
+</section>
+
+</body>
+</html>
